@@ -3,6 +3,7 @@
 namespace Orkestra\Bundle\SolrBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
@@ -25,5 +26,18 @@ class OrkestraSolrExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $solrDefinition = $container->getDefinition('orkestra.solr');
+        $solrDefinition->addArgument($config['solr']);
+
+        foreach ($config['mapping']['files'] as $file) {
+            if (!file_exists($file)) {
+                throw new \RuntimeException(sprintf('Solr mapping file %s does not exist', $file));
+            }
+
+            $container->addResource(new FileResource($file));
+        }
+
+        $container->setParameter('orkestra.solr.mapping.files', $config['mapping']['files']);
     }
 }

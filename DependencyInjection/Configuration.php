@@ -20,9 +20,27 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('orkestra_solr');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('solr')
+                    ->isRequired()
+                    ->children()
+                        ->scalarNode('hostname')->isRequired()->end()
+                        ->scalarNode('port')->defaultValue('8983')->end()
+                        ->scalarNode('username')->defaultNull()->end()
+                        ->scalarNode('password')->defaultNull()->end()
+                    ->end()
+                ->end()
+                ->arrayNode('mapping')
+                    ->isRequired()
+                    ->children()
+                        ->arrayNode('files')
+                            ->defaultValue(array())
+                            ->prototype('scalar')->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }
