@@ -21,8 +21,18 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('orkestra_solr');
 
         $rootNode
+            ->beforeNormalization()
+                ->ifTrue(function($v) {
+                    return isset($v['auto_mapping']) && $v['auto_mapping'] == true;
+                })
+                ->then(function($v) {
+                    unset($v['mappings']);
+                    return $v;
+                })
+            ->end()
             ->children()
-                ->arrayNode('solr')
+                ->booleanNode('auto_mapping')->defaultTrue()->end()
+                ->arrayNode('connection')
                     ->isRequired()
                     ->children()
                         ->scalarNode('hostname')->isRequired()->end()
@@ -31,12 +41,11 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('password')->defaultNull()->end()
                     ->end()
                 ->end()
-                ->arrayNode('mapping')
-                    ->isRequired()
-                    ->children()
-                        ->arrayNode('files')
-                            ->defaultValue(array())
-                            ->prototype('scalar')->end()
+                ->arrayNode('mappings')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('driver')->end()
+                            ->scalarNode('path')->end()
                         ->end()
                     ->end()
                 ->end()

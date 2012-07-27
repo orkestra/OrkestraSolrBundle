@@ -3,28 +3,29 @@
 namespace Orkestra\Bundle\SolrBundle\Mapping\Driver;
 
 use Metadata\Driver\DriverInterface;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata;
 use Orkestra\Bundle\SolrBundle\Mapping\Field;
 
 class YamlDriver implements DriverInterface
 {
-    protected $loaded = false;
+    protected $extension = '.solr.yml';
 
-    protected $config = array();
+    protected $locator;
 
-    protected $filename;
+    protected $loadedData = null;
 
-    public function __construct($filename)
+    public function __construct(FileLocatorInterface $locator)
     {
-        $this->filename = $filename;
+        $this->locator = $locator;
     }
 
     public function loadMetadataForClass(\ReflectionClass $class)
     {
         $className = $class->getName();
         $metadata = new ClassMetadata($className);
-        $config = $this->getConfigurationForClass($className);
+        $config = $this->getRawMappingData($className);
 
         if (!$config) {
             return null;
@@ -42,18 +43,21 @@ class YamlDriver implements DriverInterface
      *
      * @return array
      */
-    protected function getConfigurationForClass($className)
+    protected function getRawMappingData($className)
     {
-        if (!$this->loaded) {
-            $this->loadMappingFile();
+        if (!isset($this->loadedData[$className])) {
+            $baseFilename = str_replace('\\', '.', $className) . $this->extension;
+            $fullPath = null;
+
+            try {
+                $fullPath = $this->locator->locate($baseFilename);
+            } catch (\InvalidArgumentException $e) { }
+
+            if ($fullPath) {
+                $this->loadedData[$className] = Yaml::parse($fullPath);
+            }
         }
 
-        return isset($this->config[$className]) ? $this->config[$className] : null;
-    }
-
-    protected function loadMappingFile()
-    {
-        $this->config = Yaml::parse($this->filename);
-        $this->loaded = true;
+        return isset($this->loadedData[$className]) ? $this->loadedData[$className] : null;
     }
 }
