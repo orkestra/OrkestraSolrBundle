@@ -20,7 +20,10 @@ abstract class OrkestraSolrExtensionTest extends \PHPUnit_Framework_TestCase
             'password' => 'pass'
         ), $container->getParameter('orkestra.solr.connection'));
 
-        // TODO Test auto mapping
+        $definition = $container->getDefinition('orkestra.solr.metadata.driver.file_locator');
+        $this->assertEquals(array(
+            __DIR__ . '/Resources/config/solr'
+        ), $definition->getArgument(0));
     }
 
     protected function getContainer($file)
@@ -32,7 +35,7 @@ abstract class OrkestraSolrExtensionTest extends \PHPUnit_Framework_TestCase
 
         $container->getCompilerPassConfig()->setOptimizationPasses(array());
         $container->getCompilerPassConfig()->setRemovingPasses(array());
-        $container->setParameter('kernel.bundles', array(''));
+        $container->setParameter('kernel.bundles', array('Orkestra\Bundle\SolrBundle\Tests\DependencyInjection\FakeBundle'));
         $container->compile();
 
         return $container;
