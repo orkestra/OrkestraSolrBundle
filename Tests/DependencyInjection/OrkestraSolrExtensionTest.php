@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\Bundle\SecurityBundle\Tests\DependencyInjection;
+namespace Orkestra\Bundle\SolrBundle\Tests\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Orkestra\Bundle\SolrBundle\DependencyInjection\OrkestraSolrExtension;
@@ -32,9 +32,14 @@ abstract class OrkestraSolrExtensionTest extends \PHPUnit_Framework_TestCase
 
         $container->getCompilerPassConfig()->setOptimizationPasses(array());
         $container->getCompilerPassConfig()->setRemovingPasses(array());
-        $container->setParameter('kernel.bundles', array());
+        $container->setParameter('kernel.bundles', array(''));
         $container->compile();
 
         return $container;
     }
+}
+
+class FakeBundle
+{
+
 }

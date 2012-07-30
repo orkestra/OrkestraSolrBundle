@@ -1,6 +1,6 @@
 <?php
 
-namespace Symfony\Bundle\SecurityBundle\Tests\DependencyInjection;
+namespace Orkestra\Bundle\SolrBundle\Tests\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
