@@ -3,42 +3,40 @@
 namespace Orkestra\Bundle\SolrBundle;
 
 use Metadata\MetadataFactory;
+use Orkestra\Bundle\SolrBundle\Mapping\Persistence\PersistenceManager;
 
 class DocumentManager
 {
+    /**
+     * @var \SolrClient
+     */
     protected $solr;
 
-    protected $metadataFactory;
+    /**
+     * @var \Orkestra\Bundle\SolrBundle\Mapping\Persistence\PersistenceManager
+     */
+    protected $persistenceManager;
 
-    public function __construct(\SolrClient $solr, MetadataFactory $metadataFactory)
+    /**
+     * Constructor
+     *
+     * @param \SolrClient $solr
+     * @param \Orkestra\Bundle\SolrBundle\Mapping\Persistence\PersistenceManager $persistenceManager
+     */
+    public function __construct(\SolrClient $solr, PersistenceManager $persistenceManager)
     {
         $this->solr = $solr;
-        $this->metadataFactory = $metadataFactory;
+        $this->persistenceManager = $persistenceManager;
     }
 
-    public function insert($document)
+    /**
+     * @param object $object
+     */
+    public function insert($object)
     {
-        $className = get_class($document);
+        $document = $this->persistenceManager->mapObjectToDocument($object);
 
-        /** @var \Metadata\ClassHierarchyMetadata $metadata */
-        $metadata = $this->metadataFactory->getMetadataForClass($className);
-
-        if (!$metadata) {
-            throw new \RuntimeException('No metadata information for ' . $className);
-        }
-
-        $inputDocument = new \SolrInputDocument();
-
-        foreach ($metadata->classMetadata as $classMetdata) {
-            foreach ($classMetdata->propertyMetadata as $propertyMetadata) {
-                foreach ($propertyMetadata->fields as $field) {
-                    /** @var \Orkestra\Bundle\SolrBundle\Mapping\Field $field */
-                    $inputDocument->addField($field->name, $propertyMetadata->getValue($document));
-                }
-            }
-        }
-
-        return $this->solr->addDocument($inputDocument);
+        $this->solr->addDocument($document->getInputDocument());
     }
 
     public function commit()
@@ -64,10 +62,5 @@ class DocumentManager
     public function createQuery($query = '')
     {
         return new \SolrQuery($query);
-    }
-
-    private function getIdentifier($document)
-    {
-
     }
 }

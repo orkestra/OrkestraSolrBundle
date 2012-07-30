@@ -1,6 +1,9 @@
 parameters:
   orkestra.solr.connection: [ ]
   orkestra.solr.metadata.factory.class: Metadata\MetadataFactory
+  orkestra.solr.metadata.class_hierarchy.class: Metadata\ClassHierarchyMetadata
+  orkestra.solr.type.factory.class: Orkestra\Bundle\SolrBundle\Mapping\Type\TypeFactory
+  orkestra.solr.persistence_manager.class: Orkestra\Bundle\SolrBundle\Mapping\Persistence\PersistenceManager
 
 services:
   orkestra.solr:
@@ -10,7 +13,12 @@ services:
     class: Metadata\Driver\DriverChain
   orkestra.solr.metadata.factory:
     class: %orkestra.solr.metadata.factory.class%
-    arguments: [ @orkestra.solr.metadata.driver ]
+    arguments: [ @orkestra.solr.metadata.driver, %orkestra.solr.metadata.class_hierarchy.class% ]
+  orkestra.solr.type.factory:
+    class: %orkestra.solr.type.factory.class%
+  orkestra.solr.persistence_manager:
+    class: %orkestra.solr.persistence_manager.class%
+    arguments: [ @orkestra.solr.metadata.factory, @orkestra.solr.type.factory ]
   orkestra.solr.document_manager:
     class: Orkestra\Bundle\SolrBundle\DocumentManager
-    arguments: [ @orkestra.solr, @orkestra.solr.metadata.factory ]
+    arguments: [ @orkestra.solr, @orkestra.solr.persistence_manager ]
