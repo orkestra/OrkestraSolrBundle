@@ -14,7 +14,7 @@ class ClassMetadata extends BaseClassMetadata
 
     public function setIdentifier(Field $field)
     {
-        if (null === $this->identifier) {
+        if (null !== $this->identifier) {
             throw new \RuntimeException('A class can have only one identifier');
         }
 

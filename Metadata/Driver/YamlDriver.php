@@ -3,7 +3,6 @@
 namespace Orkestra\Bundle\SolrBundle\Metadata\Driver;
 
 use Metadata\Driver\DriverInterface;
-use Metadata\ClassMetadata;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata;

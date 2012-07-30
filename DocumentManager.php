@@ -38,13 +38,7 @@ class DocumentManager
             }
         }
 
-        try {
-            return $this->solr->addDocument($inputDocument);
-        } catch (\SolrClientException $e) {
-            $msg = strip_tags($e->getMessage());
-
-            throw $e;
-        }
+        return $this->solr->addDocument($inputDocument);
     }
 
     public function commit()
