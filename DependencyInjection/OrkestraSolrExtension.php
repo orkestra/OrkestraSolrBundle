@@ -4,18 +4,12 @@ namespace Orkestra\Bundle\SolrBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Orkestra\Bundle\SolrBundle\Mapping\Driver\YamlDriver;
+use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\DependencyInjection\Definition;
 
-/**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
- */
 class OrkestraSolrExtension extends Extension
 {
     /**
@@ -29,12 +23,15 @@ class OrkestraSolrExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        $definition = $container->getDefinition('orkestra.solr');
-        $definition->addArgument($config['connection']);
+        $container->setParameter('orkestra.solr.connection', $config['connection']);
 
         $this->configureMetadataDriver($container, $config);
     }
 
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
+     */
     private function configureMetadataDriver(ContainerBuilder $container, $config)
     {
         if ($config['auto_mapping']) {
@@ -52,6 +49,11 @@ class OrkestraSolrExtension extends Extension
         }
     }
 
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @return array
+     */
     private function getMappingPaths(ContainerBuilder $container)
     {
         $paths = array();

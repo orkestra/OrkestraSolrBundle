@@ -3,6 +3,7 @@
 namespace Orkestra\Bundle\SolrBundle\Metadata;
 
 use Metadata\ClassMetadata as BaseClassMetadata;
+use Orkestra\Bundle\SolrBundle\Exception\MappingException;
 use Orkestra\Bundle\SolrBundle\Mapping\Field;
 
 class ClassMetadata extends BaseClassMetadata
@@ -15,7 +16,7 @@ class ClassMetadata extends BaseClassMetadata
     public function setIdentifier(Field $field)
     {
         if (null !== $this->identifier) {
-            throw new \RuntimeException('A class can have only one identifier');
+            throw new MappingException('A mapped class may only have a single identifier');
         }
 
         $this->identifier = $field;

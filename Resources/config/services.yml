@@ -1,13 +1,16 @@
 parameters:
+  orkestra.solr.connection: [ ]
+  orkestra.solr.metadata.factory.class: Metadata\MetadataFactory
 
 services:
   orkestra.solr:
     class: SolrClient
+    parameters: %orkestra.solr.connection%
   orkestra.solr.metadata.driver:
     class: Metadata\Driver\DriverChain
   orkestra.solr.metadata.factory:
-    class: Metadata\MetadataFactory
+    class: %orkestra.solr.metadata.factory.class%
     arguments: [ @orkestra.solr.metadata.driver ]
   orkestra.solr.document_manager:
     class: Orkestra\Bundle\SolrBundle\DocumentManager
-    arguments: [ @orkestra.solr, @orkestra.solr.metadata.factory ]
+    arguments: [ @orkestra.solr.factory, @orkestra.solr.metadata.factory ]

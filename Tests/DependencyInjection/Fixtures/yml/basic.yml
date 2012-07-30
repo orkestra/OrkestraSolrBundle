@@ -1,0 +1,6 @@
+orkestra_solr:
+  connection:
+    hostname: localhost
+    port: 8443
+    username: user
+    password: pass
