@@ -31,7 +31,7 @@ END;
 
         $this->assertCount(2, $metadata->propertyMetadata);
         $this->assertEquals('id', $metadata->identifier->name);
-        $this->assertSame($metadata->identifier, $metadata->propertyMetadata['id']->fields[0]);
+        $this->assertSame($metadata->identifier, $metadata->propertyMetadata['id']);
         $this->assertNotEmpty($metadata->propertyMetadata['name']);
     }
 }

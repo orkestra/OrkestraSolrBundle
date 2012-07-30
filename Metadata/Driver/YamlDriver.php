@@ -43,7 +43,7 @@ class YamlDriver implements DriverInterface
             $field = new Field($fieldConfig);
             $metadata->addField($field);
             if ($field->identifier) {
-                $classMetadata->setIdentifier($field);
+                $classMetadata->setIdentifier($metadata);
             }
         }
 

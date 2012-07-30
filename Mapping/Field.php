@@ -3,6 +3,7 @@
 namespace Orkestra\Bundle\SolrBundle\Mapping;
 
 /**
+ * Maps a property to a field defined in a Solr schema
  *
  * @Annotation
  * @Target("PROPERTY")

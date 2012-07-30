@@ -3,7 +3,7 @@
 namespace Orkestra\Bundle\SolrBundle\Tests\Metadata;
 
 use Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata;
-use Orkestra\Bundle\SolrBundle\Mapping\Field;
+use Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata;
 
 /**
  * Unit tests for ClassMetadata
@@ -14,15 +14,16 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 {
     public function testMultipleIdentifierThrowsException()
     {
-        $metadata = new ClassMetadata('stdClass');
-        $field = new Field(array('name' => 'Test'));
+        $classMetadata = new ClassMetadata('Orkestra\Bundle\SolrBundle\Tests\Metadata\Driver\MockObject');
+        $propertyMetadata = new PropertyMetadata('Orkestra\Bundle\SolrBundle\Tests\Metadata\Driver\MockObject', 'id');
+
+        $classMetadata->setIdentifier($propertyMetadata);
 
         $this->setExpectedException(
             'Orkestra\Bundle\SolrBundle\Exception\MappingException',
             'A mapped class may only have a single identifier'
         );
 
-        $metadata->setIdentifier($field);
-        $metadata->setIdentifier($field);
+        $classMetadata->setIdentifier($propertyMetadata);
     }
 }
