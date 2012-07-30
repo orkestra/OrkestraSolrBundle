@@ -19,6 +19,11 @@ final class Field
      */
     public $type = 'string';
 
+    /**
+     * @var bool
+     */
+    public $identifier = false;
+
     public function __construct(array $values)
     {
         if (!isset($values['name'])) {
@@ -29,6 +34,10 @@ final class Field
 
         if (isset($values['type'])) {
             $this->type = $values['type'];
+        }
+
+        if (isset($values['identifier'])) {
+            $this->identifier = $values['identifier'] ? true : false;
         }
     }
 }

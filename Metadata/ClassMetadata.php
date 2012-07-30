@@ -7,10 +7,17 @@ use Orkestra\Bundle\SolrBundle\Mapping\Field;
 
 class ClassMetadata extends BaseClassMetadata
 {
-    public $fields = array();
+    /**
+     * @var Orkestra\Bundle\SolrBundle\Mapping\Field
+     */
+    public $identifier;
 
-    public function addField(Field $field)
+    public function setIdentifier(Field $field)
     {
-        $this->fields[] = $field;
+        if (null === $this->identifier) {
+            throw new \RuntimeException('A class can have only one identifier');
+        }
+
+        $this->identifier = $field;
     }
 }

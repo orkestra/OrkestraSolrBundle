@@ -6,5 +6,8 @@ services:
   orkestra.solr.metadata.driver:
     class: Metadata\Driver\DriverChain
   orkestra.solr.metadata.factory:
-    class: Metadata\ClassMetadataFactory
+    class: Metadata\MetadataFactory
     arguments: [ @orkestra.solr.metadata.driver ]
+  orkestra.solr.document_manager:
+    class: Orkestra\Bundle\SolrBundle\DocumentManager
+    arguments: [ @orkestra.solr, @orkestra.solr.metadata.factory ]

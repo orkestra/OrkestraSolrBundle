@@ -1,11 +1,13 @@
 <?php
 
-namespace Orkestra\Bundle\SolrBundle\Mapping\Driver;
+namespace Orkestra\Bundle\SolrBundle\Metadata\Driver;
 
 use Metadata\Driver\DriverInterface;
+use Metadata\ClassMetadata;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata;
+use Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata;
 use Orkestra\Bundle\SolrBundle\Mapping\Field;
 
 class YamlDriver implements DriverInterface
@@ -24,18 +26,29 @@ class YamlDriver implements DriverInterface
     public function loadMetadataForClass(\ReflectionClass $class)
     {
         $className = $class->getName();
-        $metadata = new ClassMetadata($className);
         $config = $this->getRawMappingData($className);
 
         if (!$config) {
             return null;
         }
 
+        $classMetadata = new ClassMetadata($className);
+
         foreach ($config['fields'] as $fieldConfig) {
-            $metadata->addField(new Field($fieldConfig));
+            if (!isset($classMetadata->propertyMetadata[$fieldConfig['property']])) {
+                $classMetadata->addPropertyMetadata(new PropertyMetadata($className, $fieldConfig['property']));
+            }
+
+            $metadata = $classMetadata->propertyMetadata[$fieldConfig['property']];
+
+            $field = new Field($fieldConfig);
+            $metadata->addField($field);
+            if ($field->identifier) {
+                $classMetadata->setIdentifier($field);
+            }
         }
 
-        return $metadata;
+        return $classMetadata;
     }
 
     /**

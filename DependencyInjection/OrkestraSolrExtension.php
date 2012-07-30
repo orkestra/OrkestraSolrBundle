@@ -29,6 +29,9 @@ class OrkestraSolrExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
+        $definition = $container->getDefinition('orkestra.solr');
+        $definition->addArgument($config['connection']);
+
         $this->configureMetadataDriver($container, $config);
     }
 
@@ -36,7 +39,7 @@ class OrkestraSolrExtension extends Extension
     {
         if ($config['auto_mapping']) {
             $locatorDefinition = $container->register('orkestra.solr.metadata.driver.file_locator', 'Symfony\Component\Config\FileLocator');
-            $locatorDefinition->setArguments($this->getMappingPaths($container));
+            $locatorDefinition->setArguments(array($this->getMappingPaths($container)));
 
             $driverDefinition = $container->getDefinition('orkestra.solr.metadata.driver');
             $driverDefinition->setClass('Orkestra\Bundle\SolrBundle\Metadata\Driver\YamlDriver');
