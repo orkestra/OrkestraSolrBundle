@@ -16,8 +16,14 @@ use Orkestra\Bundle\SolrBundle\Mapping\Field;
 
 class PropertyMetadata extends BasePropertyMetadata
 {
+    /**
+     * @var array
+     */
     public $fields = array();
 
+    /**
+     * @param \Orkestra\Bundle\SolrBundle\Mapping\Field $field
+     */
     public function addField(Field $field)
     {
         $this->fields[] = $field;

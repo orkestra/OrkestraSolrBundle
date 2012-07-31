@@ -11,10 +11,10 @@
 
 namespace Orkestra\Bundle\SolrBundle\Metadata;
 
-use Metadata\ClassMetadata as BaseClassMetadata;
+use Metadata\ClassHierarchyMetadata as BaseClassHierarchyMetadata;
 use Orkestra\Bundle\SolrBundle\Exception\MappingException;
 
-class ClassMetadata extends BaseClassMetadata
+class ClassHierarchyMetadata extends BaseClassHierarchyMetadata
 {
     /**
      * @var \Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata
@@ -22,16 +22,20 @@ class ClassMetadata extends BaseClassMetadata
     public $identifier;
 
     /**
-     * @param \Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata $metadata
+     * @param \Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata $metadata
      *
      * @throws \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
      */
-    public function setIdentifier(PropertyMetadata $metadata)
+    public function addClassMetadata(ClassMetadata $metadata)
     {
-        if (null !== $this->identifier) {
-            throw MappingException::classMayNotHaveMultipleIdentifiers();
+        if ($metadata->identifier) {
+            if (null !== $this->identifier) {
+                throw MappingException::classMayNotHaveMultipleIdentifiers();
+            }
+
+            $this->identifier = $metadata->identifier;
         }
 
-        $this->identifier = $metadata;
+        $this->classMetadata[$metadata->name] = $metadata;
     }
 }

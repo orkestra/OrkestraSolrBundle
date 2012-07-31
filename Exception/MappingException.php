@@ -23,4 +23,14 @@ class MappingException extends \Exception
     {
         return new self(sprintf('Class "%s" is not a mapped Solr document', $className));
     }
+
+    /**
+     * @static
+     *
+     * @return \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
+     */
+    public static function classMayNotHaveMultipleIdentifiers()
+    {
+        return new self('A mapped class hierarchy may only define a single identifier');
+    }
 }

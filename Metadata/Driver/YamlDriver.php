@@ -20,17 +20,38 @@ use Orkestra\Bundle\SolrBundle\Mapping\Field;
 
 class YamlDriver implements DriverInterface
 {
+    /**
+     * @var string
+     */
     protected $extension = '.solr.yml';
 
+    /**
+     * @var \Symfony\Component\Config\FileLocatorInterface
+     */
     protected $locator;
 
-    protected $loadedData = null;
+    /**
+     * @var array
+     */
+    protected $loadedData = array();
 
+    /**
+     * Constructor
+     *
+     * @param \Symfony\Component\Config\FileLocatorInterface $locator
+     */
     public function __construct(FileLocatorInterface $locator)
     {
         $this->locator = $locator;
     }
 
+    /**
+     * Attempts to load the metadata for the specified class
+     *
+     * @param \ReflectionClass $class
+     *
+     * @return \Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata|null
+     */
     public function loadMetadataForClass(\ReflectionClass $class)
     {
         $className = $class->getName();

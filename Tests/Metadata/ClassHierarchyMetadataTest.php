@@ -11,28 +11,33 @@
 
 namespace Orkestra\Bundle\SolrBundle\Tests\Metadata;
 
+use Orkestra\Bundle\SolrBundle\Metadata\ClassHierarchyMetadata;
 use Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata;
 use Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata;
 
 /**
- * Unit tests for ClassMetadata
+ * Unit tests for ClassHierarchyMetadata
  *
  * @group orkestra
  */
-class ClassMetadataTest extends \PHPUnit_Framework_TestCase
+class ClassHierarchyMetadataTest extends \PHPUnit_Framework_TestCase
 {
     public function testMultipleIdentifiersThrowsException()
     {
         $classMetadata = new ClassMetadata('Orkestra\Bundle\SolrBundle\Tests\Metadata\Driver\MockObject');
         $propertyMetadata = new PropertyMetadata('Orkestra\Bundle\SolrBundle\Tests\Metadata\Driver\MockObject', 'id');
-
         $classMetadata->setIdentifier($propertyMetadata);
+
+        $classMetadata2 = clone $classMetadata;
+
+        $hierarchyMetadata = new ClassHierarchyMetadata();
+        $hierarchyMetadata->addClassMetadata($classMetadata);
 
         $this->setExpectedException(
             'Orkestra\Bundle\SolrBundle\Exception\MappingException',
             'A mapped class hierarchy may only define a single identifier'
         );
 
-        $classMetadata->setIdentifier($propertyMetadata);
+        $hierarchyMetadata->addClassMetadata($classMetadata2);
     }
 }
