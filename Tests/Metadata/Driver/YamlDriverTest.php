@@ -31,12 +31,12 @@ END;
         $locator = $this->getMockForAbstractClass('Symfony\Component\Config\FileLocatorInterface');
         $locator->expects($this->once())
             ->method('locate')
-            ->with($this->equalTo('Orkestra.Bundle.SolrBundle.Tests.Metadata.Driver.MockObject.solr.yml'))
+            ->with($this->equalTo('Orkestra.Bundle.SolrBundle.Tests.Fixture.Person.solr.yml'))
             ->will($this->returnValue($config));
 
         $driver = new YamlDriver($locator);
 
-        $metadata = $driver->loadMetadataForClass(new \ReflectionClass('Orkestra\Bundle\SolrBundle\Tests\Metadata\Driver\MockObject'));
+        $metadata = $driver->loadMetadataForClass(new \ReflectionClass('Orkestra\Bundle\SolrBundle\Tests\Fixture\Person'));
 
         $this->assertCount(2, $metadata->propertyMetadata);
         $this->assertEquals('id', $metadata->identifier->name);

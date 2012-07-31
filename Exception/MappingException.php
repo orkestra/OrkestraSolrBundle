@@ -11,9 +11,14 @@
 
 namespace Orkestra\Bundle\SolrBundle\Exception;
 
+/**
+ * A mapping related exception
+ */
 class MappingException extends \Exception
 {
     /**
+     * Thrown when metadata for a class with no mapped metadata is requested
+     *
      * @static
      * @param string $className
      *
@@ -25,6 +30,8 @@ class MappingException extends \Exception
     }
 
     /**
+     * Thrown when multiple identifiers are mapped to a class hierarchy
+     *
      * @static
      *
      * @return \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
@@ -32,5 +39,18 @@ class MappingException extends \Exception
     public static function classMayNotHaveMultipleIdentifiers()
     {
         return new self('A mapped class hierarchy may only define a single identifier');
+    }
+
+    /**
+     * Thrown when the identifier for a class without one is requested
+     *
+     * @static
+     * @param string $className
+     *
+     * @return \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
+     */
+    public static function classHasNoMappedIdentifier($className)
+    {
+        return new self(sprintf('The class "%s" has no mapped identifier', $className));
     }
 }

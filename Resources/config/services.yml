@@ -1,7 +1,7 @@
 parameters:
   orkestra.solr.connection: [ ]
   orkestra.solr.metadata.factory.class: Metadata\MetadataFactory
-  orkestra.solr.metadata.class_hierarchy.class: Metadata\ClassHierarchyMetadata
+  orkestra.solr.metadata.class_hierarchy.class: Orkestra\Bundle\SolrBundle\Metadata\ClassHierarchyMetadata
   orkestra.solr.type.factory.class: Orkestra\Bundle\SolrBundle\Mapping\Type\TypeFactory
   orkestra.solr.persistence_manager.class: Orkestra\Bundle\SolrBundle\Mapping\Persistence\PersistenceManager
 

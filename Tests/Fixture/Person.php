@@ -9,11 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Orkestra\Bundle\SolrBundle\Tests\Metadata\Driver;
+namespace Orkestra\Bundle\SolrBundle\Tests\Fixture;
 
-class MockObject
+class Person
 {
     public $id;
 
     public $name;
+
+    public $dateModified;
 }

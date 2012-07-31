@@ -17,19 +17,45 @@ use Orkestra\Bundle\SolrBundle\Exception\MappingException;
 
 class PersistenceManager
 {
+    /**
+     * @var \Metadata\MetadataFactoryInterface
+     */
     protected $metadataFactory;
 
+    /**
+     * @var \Orkestra\Bundle\SolrBundle\Mapping\Type\TypeFactoryInterface
+     */
     protected $typeFactory;
 
+    /**
+     * Constructor
+     *
+     * @param \Metadata\MetadataFactoryInterface $metadataFactory
+     * @param \Orkestra\Bundle\SolrBundle\Mapping\Type\TypeFactoryInterface $typeFactory
+     */
     public function __construct(MetadataFactoryInterface $metadataFactory, TypeFactoryInterface $typeFactory)
     {
         $this->metadataFactory = $metadataFactory;
         $this->typeFactory = $typeFactory;
     }
 
+    /**
+     * Gets the value of an object's mapped identifier
+     *
+     * @param object $object
+     *
+     * @return \Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata
+     * @throws \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
+     */
     public function getIdentifier($object)
     {
+        $className = get_class($object);
+        $metadata = $this->getMetadata($className);
+        if (null === $metadata->identifier) {
+            throw MappingException::classHasNoMappedIdentifier($className);
+        }
 
+        return $metadata->identifier->getValue($object);
     }
 
     /**
@@ -58,7 +84,7 @@ class PersistenceManager
     /**
      * @param string $className
      *
-     * @return \Metadata\ClassHierarchyMetadata
+     * @return \Orkestra\Bundle\SolrBundle\Metadata\ClassHierarchyMetadata
      * @throws \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
      */
     private function getMetadata($className)
