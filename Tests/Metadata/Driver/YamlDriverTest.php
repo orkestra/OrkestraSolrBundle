@@ -23,9 +23,10 @@ class YamlDriverTest extends \PHPUnit_Framework_TestCase
     public function testLoadMetadataForClass()
     {
         $config = <<<END
-fields:
-  - { name: id, property: id, identifier: true }
-  - { name: name, property: name }
+Orkestra\Bundle\SolrBundle\Tests\Fixture\Person:
+  fields:
+    - { name: id, property: id, identifier: true }
+    - { name: name, property: name }
 END;
 
         $locator = $this->getMockForAbstractClass('Symfony\Component\Config\FileLocatorInterface');

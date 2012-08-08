@@ -22,7 +22,7 @@ class MappingException extends \Exception
      * @static
      * @param string $className
      *
-     * @return \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
+     * @return \Orkestra\Bundle\SolrBundle\Exception\MappingException
      */
     public static function classIsNotMapped($className)
     {
@@ -34,7 +34,7 @@ class MappingException extends \Exception
      *
      * @static
      *
-     * @return \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
+     * @return \Orkestra\Bundle\SolrBundle\Exception\MappingException
      */
     public static function classMayNotHaveMultipleIdentifiers()
     {
@@ -47,10 +47,23 @@ class MappingException extends \Exception
      * @static
      * @param string $className
      *
-     * @return \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
+     * @return \Orkestra\Bundle\SolrBundle\Exception\MappingException
      */
     public static function classHasNoMappedIdentifier($className)
     {
         return new self(sprintf('The class "%s" has no mapped identifier', $className));
+    }
+
+    /**
+     * Thrown when a file contains invalid mapping data
+     *
+     * @static
+     * @param string $filename
+     *
+     * @return \Orkestra\Bundle\SolrBundle\Exception\MappingException
+     */
+    public static function invalidMapping($filename)
+    {
+        return new self(sprintf('The file "%s" contains invalid mapping data', $filename));
     }
 }

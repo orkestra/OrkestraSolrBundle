@@ -12,6 +12,7 @@
 namespace Orkestra\Bundle\SolrBundle\Metadata;
 
 use Metadata\ClassHierarchyMetadata as BaseClassHierarchyMetadata;
+use Metadata\ClassMetadata as BaseClassMetadata;
 use Orkestra\Bundle\SolrBundle\Exception\MappingException;
 
 class ClassHierarchyMetadata extends BaseClassHierarchyMetadata
@@ -26,7 +27,7 @@ class ClassHierarchyMetadata extends BaseClassHierarchyMetadata
      *
      * @throws \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
      */
-    public function addClassMetadata(ClassMetadata $metadata)
+    public function addClassMetadata(BaseClassMetadata $metadata)
     {
         if ($metadata->identifier) {
             if (null !== $this->identifier) {

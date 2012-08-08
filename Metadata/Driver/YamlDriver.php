@@ -12,6 +12,7 @@
 namespace Orkestra\Bundle\SolrBundle\Metadata\Driver;
 
 use Metadata\Driver\DriverInterface;
+use Orkestra\Bundle\SolrBundle\Exception\MappingException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata;
@@ -96,7 +97,12 @@ class YamlDriver implements DriverInterface
             } catch (\InvalidArgumentException $e) { }
 
             if ($fullPath) {
-                $this->loadedData[$className] = Yaml::parse($fullPath);
+                $data = Yaml::parse($fullPath);
+                if (!isset($data[$className])) {
+                    throw MappingException::invalidMapping($fullPath);
+                }
+
+                $this->loadedData[$className] = $data[$className];
             }
         }
 
