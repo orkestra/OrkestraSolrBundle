@@ -55,7 +55,7 @@ class PersistenceManager
             throw MappingException::classHasNoMappedIdentifier($className);
         }
 
-        return $metadata->identifier->getValue($object);
+        return $metadata->reflectionIdentifer->getValue($object);
     }
 
     /**
@@ -70,11 +70,10 @@ class PersistenceManager
         $metadata = $this->getMetadata(get_class($object));
         $document = new \SolrDocument();
         foreach ($metadata->classMetadata as $classMetadata) {
-            foreach ($classMetadata->propertyMetadata as $propertyMetadata) {
-                foreach ($propertyMetadata->fields as $field) {
-                    /** @var \Orkestra\Bundle\SolrBundle\Mapping\Field $field */
-                    $document->addField($field->name, $propertyMetadata->getValue($object));
-                }
+            foreach ($classMetadata->fields as $field) {
+                $name = $field['name'];
+                $property = $field['property'];
+                $document->addField($name, $classMetadata->reflectionFields[$property]->getValue($object));
             }
         }
 

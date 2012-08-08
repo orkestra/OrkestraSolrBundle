@@ -17,21 +17,59 @@ use Orkestra\Bundle\SolrBundle\Exception\MappingException;
 class ClassMetadata extends BaseClassMetadata
 {
     /**
-     * @var \Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata
+     * @var string
      */
     public $identifier;
 
     /**
-     * @param \Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata $metadata
-     *
-     * @throws \Orkestra\Bundle\SolrBundle\Exception\PersistenceException
+     * @var array
      */
-    public function setIdentifier(PropertyMetadata $metadata)
+    public $fields = array();
+
+    /**
+     * @var array
+     */
+    public $reflectionFields = array();
+
+    /**
+     * Constructor
+     *
+     * @param string $name The fully qualified class name
+     */
+    public function __construct($name)
+    {
+        parent::__construct($name);
+
+        // TODO: Investigate lazy loading
+        foreach ($this->reflection->getProperties() as $reflectionField) {
+            $reflectionField->setAccessible(true);
+            $this->reflectionFields[$reflectionField->getName()] = $reflectionField;
+        }
+    }
+
+    /**
+     * Sets the mapped identifier
+     *
+     * @param string $field
+     *
+     * @throws \Orkestra\Bundle\SolrBundle\Exception\MappingException
+     */
+    public function setIdentifier($field)
     {
         if (null !== $this->identifier) {
             throw MappingException::classMayNotHaveMultipleIdentifiers();
         }
 
-        $this->identifier = $metadata;
+        $this->identifier = $field;
+    }
+
+    /**
+     * Adds a field mapping
+     *
+     * @param array $field
+     */
+    public function addField($field)
+    {
+        $this->fields[$field['name']] = $field;
     }
 }

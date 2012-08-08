@@ -24,9 +24,10 @@ class YamlDriverTest extends \PHPUnit_Framework_TestCase
     {
         $config = <<<END
 Orkestra\Bundle\SolrBundle\Tests\Fixture\Person:
+  id:            id
   fields:
-    - { name: id, property: id, identifier: true }
-    - { name: name, property: name }
+    person_id:   { property: id }
+    person_name: { property: name }
 END;
 
         $locator = $this->getMockForAbstractClass('Symfony\Component\Config\FileLocatorInterface');
@@ -39,9 +40,9 @@ END;
 
         $metadata = $driver->loadMetadataForClass(new \ReflectionClass('Orkestra\Bundle\SolrBundle\Tests\Fixture\Person'));
 
-        $this->assertCount(2, $metadata->propertyMetadata);
-        $this->assertEquals('id', $metadata->identifier->name);
-        $this->assertSame($metadata->identifier, $metadata->propertyMetadata['id']);
-        $this->assertNotEmpty($metadata->propertyMetadata['name']);
+        $this->assertCount(2, $metadata->fields);
+        $this->assertEquals('id', $metadata->identifier);
+        $this->assertEquals('id', $metadata->fields['person_id']['property']);
+        $this->assertEquals('name', $metadata->fields['person_name']['property']);
     }
 }

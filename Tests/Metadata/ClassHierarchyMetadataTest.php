@@ -25,8 +25,7 @@ class ClassHierarchyMetadataTest extends \PHPUnit_Framework_TestCase
     public function testMultipleIdentifiersThrowsException()
     {
         $classMetadata = new ClassMetadata('Orkestra\Bundle\SolrBundle\Tests\Fixture\Person');
-        $propertyMetadata = new PropertyMetadata('Orkestra\Bundle\SolrBundle\Tests\Fixture\Person', 'id');
-        $classMetadata->setIdentifier($propertyMetadata);
+        $classMetadata->setIdentifier('id');
 
         $classMetadata2 = clone $classMetadata;
 

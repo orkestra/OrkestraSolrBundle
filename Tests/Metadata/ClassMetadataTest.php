@@ -24,15 +24,14 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
     public function testMultipleIdentifiersThrowsException()
     {
         $classMetadata = new ClassMetadata('Orkestra\Bundle\SolrBundle\Tests\Fixture\Person');
-        $propertyMetadata = new PropertyMetadata('Orkestra\Bundle\SolrBundle\Tests\Fixture\Person', 'id');
 
-        $classMetadata->setIdentifier($propertyMetadata);
+        $classMetadata->setIdentifier('id');
 
         $this->setExpectedException(
             'Orkestra\Bundle\SolrBundle\Exception\MappingException',
             'A mapped class hierarchy may only define a single identifier'
         );
 
-        $classMetadata->setIdentifier($propertyMetadata);
+        $classMetadata->setIdentifier('id');
     }
 }

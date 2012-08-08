@@ -62,23 +62,19 @@ class YamlDriver implements DriverInterface
             return null;
         }
 
-        $classMetadata = new ClassMetadata($className);
+        $metadata = new ClassMetadata($className);
 
-        foreach ($config['fields'] as $fieldConfig) {
-            if (!isset($classMetadata->propertyMetadata[$fieldConfig['property']])) {
-                $classMetadata->addPropertyMetadata(new PropertyMetadata($className, $fieldConfig['property']));
-            }
-
-            $metadata = $classMetadata->propertyMetadata[$fieldConfig['property']];
-
-            $field = new Field($fieldConfig);
-            $metadata->addField($field);
-            if ($field->identifier) {
-                $classMetadata->setIdentifier($metadata);
-            }
+        if (isset($config['id'])) {
+            $metadata->setIdentifier($config['id']);
         }
 
-        return $classMetadata;
+        foreach ($config['fields'] as $name => $field) {
+            $field['name'] = $name;
+
+            $metadata->addField($field);
+        }
+
+        return $metadata;
     }
 
     /**

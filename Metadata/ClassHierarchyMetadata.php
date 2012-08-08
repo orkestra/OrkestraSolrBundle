@@ -18,9 +18,14 @@ use Orkestra\Bundle\SolrBundle\Exception\MappingException;
 class ClassHierarchyMetadata extends BaseClassHierarchyMetadata
 {
     /**
-     * @var \Orkestra\Bundle\SolrBundle\Metadata\PropertyMetadata
+     * @var string
      */
     public $identifier;
+
+    /**
+     * @var \ReflectionProperty
+     */
+    public $reflectionIdentifer;
 
     /**
      * @param \Orkestra\Bundle\SolrBundle\Metadata\ClassMetadata $metadata
@@ -35,6 +40,9 @@ class ClassHierarchyMetadata extends BaseClassHierarchyMetadata
             }
 
             $this->identifier = $metadata->identifier;
+
+            // TODO: This is not the most elegant way to handle this
+            $this->reflectionIdentifer = $metadata->reflectionFields[$metadata->identifier];
         }
 
         $this->classMetadata[$metadata->name] = $metadata;
